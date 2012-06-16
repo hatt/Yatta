@@ -2609,6 +2609,30 @@ begin
 
       DrawFrame;
     end
+    else if IsKeyEvent(kMarkCustomListNum, msg.CharCode) then
+    begin
+      if (Form2.SelectedCustomList <> nil) and FRangeOn then
+      begin
+        if Form11.SwapCustomList.Checked and (FRange > TrackBar1.Position) then
+          Form2.SelectedCustomList.Add(TCustomRange.Create(TrackBar1.Position, TrackBar1.Position - Frange - 1))
+        else
+          Form2.SelectedCustomList.Add(TCustomRange.Create(FRange, FRange - TrackBar1.Position - 1));
+
+        Form2.CustomRanges.Count := Form2.SelectedCustomList.Count;
+        Form2.SelectedCustomList.Sort(CustomListSort);
+        FRangeOn := False;
+        if FRange > TrackBar1.Position then
+          FInfoText.Append('Added range; Start: ' + IntToStr(FRange) + '; End: ' + IntToStr(FRange - TrackBar1.Position - 1));
+        else
+          FInfoText.Append('Added range; Start: ' + IntToStr(TrackBar1.Position) + '; End: ' + IntToStr(TrackBar1.Position - FRange - 1));
+      end
+      else if (Form2.SelectedCustomList <> nil) then
+        Button8Click(nil)
+      else
+        FInfoText.Append('No list selected');
+
+      DrawFrame;
+    end
     else if IsKeyEvent(kTogglePBasedOnFreqOfUse, msg.CharCode) then
     begin
       with Form2.SectionInfo(TrackBar1.Position) do
