@@ -9,7 +9,7 @@ procedure OpenProject(IniFile: TMemIniFile); // not cleaned
 procedure newproject(pt: integer);
 procedure projectcheck(inifile: TMemIniFile);
 procedure projectinit;
-function OpenVideo(Filename: string; Mpeg2Dec: string): IAsifClip; // not cleaned
+function OpenVideo(Filename: string; Decoder: string): IAsifClip; // not cleaned
 procedure EnableByProjectType(PT: Integer);
 procedure GetType0Values(IniFile: TMemIniFile);
 procedure GetType0SharedValues(IniFile: TMemIniFile);
@@ -69,7 +69,7 @@ begin
     try
       IniFile := TMemIniFile.Create(Form1.SaveDialog5.FileName);
 
-      MPEG2DecName := ChangeFileExt(IniFile.ReadString('YATTA V2', 'MPEG2DECODER', 'mpeg2dec3.dll'), '');
+      DecName := ChangeFileExt(IniFile.ReadString('YATTA V2', 'DECODER', 'mpeg2dec3.dll'), '');
       VideoSource := LeftStr(Filename, Length(Filename) - 4);
       Line := IniFile.ReadString('YATTA V2', 'CUTLIST', '');
       SetLength(Form1.FCuts, 0);
@@ -91,7 +91,7 @@ begin
       if (FileExists(VideoSource)) then
       begin
         RetryOpen:
-        Form1.OriginalVideo := OpenVideo(VideoSource, mpeg2decname);
+        Form1.OriginalVideo := OpenVideo(VideoSource, decname);
         Form1.SourceFile := VideoSource;
        end
       else
@@ -119,8 +119,8 @@ begin
   end
   else
   begin
-    MPEG2DecName := Form11.RadioGroup2.Items[Form11.RadioGroup2.ItemIndex];
-    Form1.OriginalVideo := OpenVideo(filename, mpeg2decname);
+    DecName := Form11.RadioGroup2.Items[Form11.RadioGroup2.ItemIndex];
+    Form1.OriginalVideo := OpenVideo(filename, decname);
 
     Form1.SourceFile := Filename;
 
@@ -171,7 +171,7 @@ begin
 
   CropForm.FormShow(nil);
 
-  TempName := LowerCase(MPEG2DecName);
+  TempName := LowerCase(DecName);
 
   if TempName = 'mpeg2dec3' then
     Form11.RadioGroup2.ItemIndex := 0
@@ -302,7 +302,7 @@ begin
   end;
 end;
 
-function OpenVideo(Filename: string; Mpeg2Dec: string): IAsifClip;
+function OpenVideo(Filename: string; Decoder: string): IAsifClip;
 var
   FileExt: string;
   TempTrims: array of IAsifClip;
@@ -315,11 +315,11 @@ begin
 
   if FileExt = '.d2v' then
   begin
-    LoadPlugins(Mpeg2Dec + '_mpeg2source', PluginPath, SE);
+    LoadPlugins(Decoder + '_Mpeg2Source', PluginPath, SE);
     SE.CharArg(PChar(Filename));
-    Result := SE.InvokeWithClipResult(PChar(Mpeg2Dec + '_Mpeg2Source'));
+    Result := SE.InvokeWithClipResult(PChar(Decoder + '_Mpeg2Source'));
 
-    if not AnsiSameText('DGDecode', Mpeg2Dec) and SE.FunctionExists('SetPlanarLegacyAlignment') then
+    if not AnsiSameText(Decoder, 'DGDecode') and SE.FunctionExists('SetPlanarLegacyAlignment') then
     begin
       SE.ClipArg(Result);
       SE.BoolArg(True);
@@ -331,6 +331,12 @@ begin
     LoadPlugins('AVCSource', PluginPath, SE);
     SE.CharArg(PChar(Filename));
     Result := SE.InvokeWithClipResult('AVCSource');
+  end
+  else if FileExt = '.dgi' then
+  begin
+    LoadPlugins(Decoder + '_DGSource', PluginPath, SE);
+    SE.CharArg(PChar(Filename));
+    Result := SE.InvokeWithClipResult(Decoder + '_DGSource');
   end
   else if FileExt = '.avs' then
   begin
@@ -589,10 +595,10 @@ begin
         Line := SL[Counter];
         StarCount := 0;
         for I := 1 to Length(Line) do
-          if Line[I] = 'ค' then
+          if Line[I] = 'ยง' then
             Inc(StarCount);
         if StarCount >= 3 then
-          SubDiv.Delimiter := 'ค';
+          SubDiv.Delimiter := 'ยง';
 
         if Line <> '' then
         begin

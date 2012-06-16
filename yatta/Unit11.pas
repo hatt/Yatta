@@ -178,7 +178,7 @@ procedure TForm11.FormDestroy(Sender: TObject);
 begin
   with Settings do
   begin
-    WriteInteger('MAIN', 'MPEG2DECODER', form11.RadioGroup2.ItemIndex);
+    WriteInteger('MAIN', 'DECODER', form11.RadioGroup2.ItemIndex);
     WriteInteger('MAIN', 'DEFAULTPROJECTTYPE', form11.RadioGroup3.ItemIndex);
     WriteBool('MAIN', 'PreviewCurrentFrame', form11.CheckBox10.Checked);
     WriteString('MAIN', 'PluginDir', form11.LabeledEdit1.Text);

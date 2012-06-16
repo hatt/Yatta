@@ -797,16 +797,20 @@ begin
     TempExt := AnsiLowerCase(ExtractFileExt(Form1.SourceFile));
     if (TempExt = '.d2v') then
     begin
-      SL.Append(MPEG2DecName + '_Mpeg2Source("' + Form1.SourceFile + '")');
-      if not AnsiSameText('DGDecode', MPEG2DecName) and se.FunctionExists('SetPlanarLegacyAlignment') then
+      SL.Append(Decoder + '_Mpeg2Source("' + Form1.SourceFile + '")');
+      if not AnsiSameText(Decoder, 'DGDecode') and se.FunctionExists('SetPlanarLegacyAlignment') then
         SL.Append('SetPlanarLegacyAlignment(true)');
     end
     else if TempExt = '.dga' then
       SL.Append('AVCSource("' + Form1.SourceFile + '")')
+    else if TempExt = '.dgi' then
+      SL.Append(Decoder + '_DGSource("' + Form1.SourceFile + '")')
     else if TempExt = '.avs' then
       SL.Append('Import("' + Form1.SourceFile + '")')
+    else if TempExt = '.avi' then
+      SL.Append('AviSource("' + Form1.SourceFile + '")')
     else
-      SL.Append('AviSource("' + Form1.SourceFile + '")');
+      SL.Append('FFVideoSource("' + Form1.SourceFile + '")');
 
 
     if Length(Form1.FCuts) > 0 then
@@ -1525,16 +1529,20 @@ begin
     try
       if TempExt = '.d2v' then
       begin
-        SL.Append(MPEG2DecName + '_Mpeg2Source("' + Form1.SourceFile + '")');
-        if not AnsiSameText('DGDecode', MPEG2DecName) and SE.FunctionExists('SetPlanarLegacyAlignment') then
+        SL.Append(Decoder + '_Mpeg2Source("' + Form1.SourceFile + '")');
+        if not AnsiSameText(Decoder, 'DGDecode') and SE.FunctionExists('SetPlanarLegacyAlignment') then
           SL.Append('SetPlanarLegacyAlignment(true)');
       end
       else if TempExt = '.dga' then
         SL.Append('AVCSource("' + Form1.SourceFile + '")')
+      else if TempExt = '.dgi' then
+        SL.Append(Decoder + '_DGSource("' + Form1.SourceFile + '")')
       else if TempExt = '.avs' then
         SL.Append('Import("' + Form1.SourceFile + '")')
+      else if TempExt = '.avi' then
+        SL.Append('AviSource("' + Form1.SourceFile + '")')
       else
-        SL.Append('AviSource("' + Form1.SourceFile + '")');
+        SL.Append('FFVideoSource("' + Form1.SourceFile + '")');
 
       SL.Append(Form1.MakeCutLine);
       SL.Append('');
@@ -1659,10 +1667,10 @@ begin
         StarCount := 0;
         CurrentLine := sl[counter];
         for I := 1 to Length(CurrentLine) do
-          if CurrentLine[I] = 'ค' then
+          if CurrentLine[I] = 'ยง' then
             Inc(StarCount);
         if StarCount >= 3 then
-          subdiv.Delimiter := 'ค';
+          subdiv.Delimiter := 'ยง';
 
         subdiv.DelimitedText := CurrentLine;
 
