@@ -1,5 +1,7 @@
 YATTA is a tool designed to collect metrics from several common IVTC filters used in Avisynth so that they can be manually improved upon. It also has several features related to generating complex Avisynth scripts for certain parts of the encoding process. The project also contains a few small filters that can be useful in the process.
 
+See http://ivtc.org for downloads of YATTA and dependencies
+
 Avisynth Dependencies
 Required:
 * SCXviD
@@ -8,7 +10,7 @@ Required:
 * Decomb
 * TIVTC
 
-Optional:
+Optional
 * TDeint
 * EEDI3
 * KernelDeint
@@ -19,7 +21,7 @@ Optional:
 * SangNom
 * Enpipe
 
-Supported Sources:
+Supported Sources
 * DVD2AVI
 * DGDecode
 * DGAVCDecDi
@@ -28,4 +30,13 @@ Supported Sources:
 * Avisynth scripts
 * AVI files
 
-See http://ivtc.org for downloads of YATTA and dependencies
+Compiling YATTA
+Supported Delphi Versions:
+Compiling YATTA should work in Delphi 7 and later (2005, 2006, TurboExplorer and 2007) with all the different patching levels. Delphi 6 may also be possible to use but it hasn't been tried recently. Earlier versions are guaranteed to fail due to missing compiler directives.
+
+Build Dependencies:
+Graphics32 - http://www.graphics32.org/wiki/
+FastMM4 (Optional) - http://sourceforge.net/projects/fastmm
+Just remove it from the uses clause if you don't want to use it. It's mostly useful for debugging.
+
+For CHANGELIST, see compiled/changes.txt
