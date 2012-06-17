@@ -2977,8 +2977,8 @@ object Form1: TForm1
   end
   object OpenDialog1: TOpenDialog
     Filter = 
-      'All Supported|*.avi;*.d2v;*.dga;*.avs;*.yap*;*.ogm;*.mkv;*.mp4|P' +
-      'rojects|*.yap|Video|*.avi;*.d2v;*.dga;*.avs;*.ogm;*.mkv;*.mp4'
+      'All Supported|*.avi;*.d2v;*.dga;*.dgi;*.avs;*.yap*;*.ogm;*.mkv;*.mp4|P' +
+      'rojects|*.yap|Video|*.avi;*.d2v;*.dga;*.dgi;*.avs;*.ogm;*.mkv;*.mp4'
     FilterIndex = 2
     Options = [ofHideReadOnly, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 192

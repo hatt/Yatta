@@ -254,7 +254,7 @@ object MainForm: TMainForm
   end
   object OpenDialog: TOpenDialog
     Filter = 
-      'Video (*.avi;*.avs;*.d2v;*.dga)|*.avi;*.avs;*.d2v;*.dga|All File' +
+      'Video (*.avi;*.avs;*.d2v;*.dga;*.dgi)|*.avi;*.avs;*.d2v;*.dga;*.dgi|All File' +
       's (*.*)|*.*'
     Options = [ofHideReadOnly, ofAllowMultiSelect, ofPathMustExist, ofFileMustExist, ofEnableSizing]
     Left = 184

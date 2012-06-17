@@ -10,7 +10,7 @@ Required:
 * Decomb
 * TIVTC
 
-Optional
+Optional:
 * TDeint
 * EEDI3
 * KernelDeint
