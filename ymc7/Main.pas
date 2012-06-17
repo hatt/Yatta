@@ -156,7 +156,7 @@ begin
 
   YMCPluginInit(@AddPlugin);
 
-  FTaskList := TYMCTaskList.Create(PluginPath, TMpeg2Decoder(INI.ReadInteger(MainIniKey, 'Mpeg2Decoder', Integer(mdMpeg2Dec3))), INI);
+  FTaskList := TYMCTaskList.Create(PluginPath, TDecoder(INI.ReadInteger(MainIniKey, 'DECODER', Integer(mdMpeg2Dec3))), INI);
   FTaskList.SavedBy := Caption;
   FTaskList.DefaultPriority := TThreadPriority(INI.ReadInteger(MainIniKey, 'DefaultPriority', Integer(tpLowest)));
 
@@ -166,7 +166,7 @@ begin
     if MessageDlg('Avisynth plugin path has to be set. If you want to change it later delete or edit the ini file.', mtWarning, [mbok, mbcancel], 0) = mrok then
       SetAvisynthPluginDirectory;
 
-  Mpeg2DecRadioGroup.ItemIndex := Integer(FTaskList.Mpeg2Decoder);
+  Mpeg2DecRadioGroup.ItemIndex := Integer(FTaskList.Decoder);
 
   case FTaskList.DefaultPriority of
     tpIdle: Idle1.Checked := True;
@@ -202,7 +202,7 @@ begin
     WriteInteger(MainIniKey, 'Version', INIVersion);
     WriteBool(MainIniKey, 'CloseWhenDone', CloseWhenDone.Checked);
     WriteBool(MainIniKey, 'LaunchYatta', LaunchWhenDone.Checked);
-    WriteInteger(MainIniKey, 'Mpeg2Decoder', Mpeg2DecRadioGroup.ItemIndex);
+    WriteInteger(MainIniKey, 'Decoder', Mpeg2DecRadioGroup.ItemIndex);
     WriteString(MainIniKey, 'PluginDir', FTaskList.PluginPath);
     WriteInteger(MainIniKey, 'MaxJobs', FTaskList.MaxThreads);
 
@@ -414,7 +414,7 @@ end;
 
 procedure TMainForm.Mpeg2DecRadioGroupClick(Sender: TObject);
 begin
-  FTaskList.Mpeg2Decoder := TMpeg2Decoder(Mpeg2DecRadioGroup.ItemIndex);
+  FTaskList.Decoder := TDecoder(Mpeg2DecRadioGroup.ItemIndex);
 end;
 
 procedure TMainForm.SetAvisynthPluginDirectory;
