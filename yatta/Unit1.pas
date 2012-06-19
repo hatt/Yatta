@@ -3316,7 +3316,7 @@ begin
     else                            
     begin
       Append(PluginListToScript(GetRequiredPlugins(True, 'FFmpegSource()', PluginPath, SE), PluginPath));
-      Append('FFmpegSource("' + FAudioFile + '", vtrack=-2, atrack=-1)');
+      Append('FFAudioSource("' + FAudioFile + '", vtrack=-2, atrack=-1)');
     end;
 
     Append(Format('AudioDub(BlankClip(width=16, height=16, length=%d, fps=%d, fps_denominator=%d), last)', [FActualFramecount, FPSNumerator, FPSDenominator]));

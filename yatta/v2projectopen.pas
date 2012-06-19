@@ -24,7 +24,7 @@ const
 
 implementation
 
-uses Forms, asifadditions;
+uses Forms, asifadditions, IndexAdditions;
 
 procedure GetNoDecimateType1(IniFile: TMemIniFile);
 var
@@ -69,7 +69,9 @@ begin
     try
       IniFile := TMemIniFile.Create(Form1.SaveDialog5.FileName);
 
-      DecName := ChangeFileExt(IniFile.ReadString('YATTA V2', 'DECODER', 'mpeg2dec3.dll'), '');
+      DecName := IniFile.ReadString('YATTA V2', 'DECODER', '');
+      if (DecName = '')
+        DecName := IniFile.ReadString('YATTA V2', 'MPEG2DECODER', 'mpeg2dec3');
       VideoSource := LeftStr(Filename, Length(Filename) - 4);
       Line := IniFile.ReadString('YATTA V2', 'CUTLIST', '');
       SetLength(Form1.FCuts, 0);
@@ -91,7 +93,7 @@ begin
       if (FileExists(VideoSource)) then
       begin
         RetryOpen:
-        Form1.OriginalVideo := OpenVideo(VideoSource, decname);
+        Form1.OriginalVideo := OpenVideo(VideoSource, DecName);
         Form1.SourceFile := VideoSource;
        end
       else
@@ -103,7 +105,7 @@ begin
         MessageDlg('Video source not found. Select a matching file.', mtInformation, [mbok], 0);
         if Form1.OpenDialog1.Execute then
         begin
-          VideoSource := Form1.OpenDialog1.FileName;
+          VideoSource := Form1.OpenDialog1.Filename;
           goto RetryOpen;
         end
         else
@@ -117,13 +119,39 @@ begin
       IniFile.Free;
     end;
   end
-  else
+  else if (FileExt = '.d2v')
   begin
-    DecName := Form11.RadioGroup2.Items[Form11.RadioGroup2.ItemIndex];
-    Form1.OriginalVideo := OpenVideo(filename, decname);
+    DecName := GetIndexDecoder(Filename);
+    Form1.OriginalVideo := OpenVideo(Filename, DecName);
 
     Form1.SourceFile := Filename;
 
+    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex))
+  end
+  else if (FileExt = '.dga')
+  begin
+    DecName := 'DGAVCDecode';
+    Form1.OriginalVideo := OpenVideo(Filename, DecName);
+    
+    Form1.SourceFile := Filename;
+    
+    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex))
+  end
+  else if (FileExt = '.dgi')
+  begin
+    DecName := GetIndexDecoder(Filename);
+    Form1..OriginalVideo := OpenVideo(Filename, DecName);
+
+    Form1.SourceFile := Filename;
+
+    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex))
+  end
+  else
+    DecName := '';
+    Form1.OriginalVideo := OpenVideo(Filename, DecName);
+    
+    Form1.SourceFile := Filename;
+    
     NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex))
   end;
 end;
@@ -132,7 +160,6 @@ end;
 procedure OpenProject(IniFile: TMemIniFile);
 var
   SV: AVSValueStruct;
-  TempName: string;
   SearchPath, SearchString: string;
   FR: TSearchRec;
   AudioDelay: Integer;
@@ -170,13 +197,6 @@ begin
   Form1.Caption := 'YATTA - ' + Form1.SaveDialog5.FileName;
 
   CropForm.FormShow(nil);
-
-  TempName := LowerCase(DecName);
-
-  if TempName = 'mpeg2dec3' then
-    Form11.RadioGroup2.ItemIndex := 0
-  else if TempName = 'dgdecode' then
-    Form11.RadioGroup2.ItemIndex := 1;
 
   Form1.FileOpen := True;
 
@@ -328,9 +348,9 @@ begin
   end
   else if FileExt = '.dga' then
   begin
-    LoadPlugins('AVCSource', PluginPath, SE);
+    LoadPlugins(Decoder + '_AVCSource', PluginPath, SE);
     SE.CharArg(PChar(Filename));
-    Result := SE.InvokeWithClipResult('AVCSource');
+    Result := SE.InvokeWithClipResult(Decoder + '_AVCSource');
   end
   else if FileExt = '.dgi' then
   begin
@@ -460,7 +480,6 @@ begin
   end;
   Form11.RadioGroup1.Enabled := (PT in MatchingProjects);
   Form11.RadioGroup3.Enabled := not (PT in AllProjects);
-  Form11.RadioGroup2.Enabled := not (PT in AllProjects);
   Form11.LabeledEdit2.Enabled := PT in MatchingProjects;
   Form11.Decimation.Enabled := PT in [1];
   Form11.AudioFileEdit.Enabled := PT in AllProjects;
