@@ -59,7 +59,7 @@ type
     FPluginPath: string;
     FMaxThreads: Integer;
     FSavedBy: string;
-    FDecoder: TDecoder;
+    FDecoder: string;
     FIni: TCustomIniFile;
     FCancelled: Boolean;
     FDefaultPriority: TThreadPriority;
@@ -67,11 +67,10 @@ type
     function GetItem(Index: Integer): TYMCTask;
     function GetRunningThreads: Integer;
     procedure SetMaxThreads(Threads: Integer);
-    function GetMpeg2DecoderString: string;
     procedure TaskDone(Task: TYMCTask; Success: Boolean);
     function GetTaskById(TaskId: Integer): TYMCTask;
   public
-    constructor Create(PluginPath: string; Decoder: TDecoder; Ini: TCustomIniFile);
+    constructor Create(PluginPath: string; Decoder: string; Ini: TCustomIniFile);
     destructor Destroy; override;
 
     function AddTask(InputFile: string; OutputFile: string; Settings: string = ''): Integer;
@@ -82,8 +81,7 @@ type
 
     property TaskId[Index: Integer]: TYMCTask read GetTaskById;
     property Ini: TCustomIniFile read FIni;
-    property Decoder: TDecoder read FDecoder write FDecoder;
-    property DecoderString: string read GetMpeg2DecoderString;
+    property Decoder: string read FDecoder write FDecoder;
     property SavedBy: string read FSavedBy write FSavedBy;
     property Items[Index: Integer]: TYMCTask read GetItem; default;
     property RunningThreads: Integer read GetRunningThreads;
@@ -95,8 +93,6 @@ type
   end;
 
 procedure AddPlugin(Plugin: TYMCPluginClass);
-
-function Mpeg2DecoderToString(Decoder: TDecoder): string;
 
 implementation
 
@@ -111,14 +107,6 @@ procedure AddPlugin(Plugin: TYMCPluginClass);
 begin
   SetLength(LoadedPlugins, Length(LoadedPlugins) + 1);
   LoadedPlugins[Length(LoadedPlugins) - 1] := Plugin;
-end;
-
-function Mpeg2DecoderToString(Decoder: TDecoder): string;
-begin
-  case Decoder of
-    mdMpeg2Dec3: Result := 'Mpeg2Dec3';
-    mdDGDecode: Result := 'DGDecode';
-  end;
 end;
 
 procedure ExecNewProcess(ProgramName: string; Arguments: string; Wait: Boolean = False);
@@ -358,9 +346,9 @@ begin
 
   if FileExt = '.d2v' then
   begin
-    LoadPlugins(FOwner.DecoderString + '_Mpeg2Source', FOwner.PluginPath, FScriptEnvironment);
+    LoadPlugins(FOwner.Decoder + '_Mpeg2Source', FOwner.PluginPath, FScriptEnvironment);
     FScriptEnvironment.CharArg(PChar(Filename));
-    Result := FScriptEnvironment.InvokeWithClipResult(PChar(FOwner.DecoderString + '_Mpeg2Source'));
+    Result := FScriptEnvironment.InvokeWithClipResult(PChar(FOwner.Decoder + '_Mpeg2Source'));
 
     if (FOwner.Decoder <> mdDGDecode) and FScriptEnvironment.FunctionExists('SetPlanarLegacyAlignment') then
     begin
@@ -426,7 +414,7 @@ begin
       MetricsFile.Insert(0, 'CUTLIST=' + Header.CutList);
     if Header.Framecount > 0 then
       MetricsFile.Insert(0, 'FRAMECOUNT=' + IntToStr(Header.Framecount));
-    MetricsFile.Insert(0, 'DECODER=' + Mpeg2DecoderToString(Header.Decoder));
+    MetricsFile.Insert(0, 'DECODER=' + Decoder);
     MetricsFile.Insert(0, 'ORDER=' + IntToStr(Header.Order));
     MetricsFile.Insert(0, 'TYPE=' + IntToStr(Header.ProjectType));
     MetricsFile.Insert(0, 'LASTVIDEOPATH=' + FInputFile);
@@ -578,7 +566,7 @@ begin
     end;
 end;
 
-constructor TYMCTaskList.Create(PluginPath: string; Decoder: TDecoder; Ini: TCustomIniFile);
+constructor TYMCTaskList.Create(PluginPath: string; Decoder: string; Ini: TCustomIniFile);
 begin
   inherited Create(True);
 
@@ -601,11 +589,6 @@ end;
 function TYMCTaskList.GetItem(Index: Integer): TYMCTask;
 begin
   Result := inherited Items[Index] as TYMCTask;
-end;
-
-function TYMCTaskList.GetMpeg2DecoderString: string;
-begin
-  Result := Mpeg2DecoderToString(Decoder);
 end;
 
 function TYMCTaskList.GetRunningThreads: Integer;

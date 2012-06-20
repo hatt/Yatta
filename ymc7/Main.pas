@@ -5,7 +5,7 @@ interface
 uses
   Windows, Messages, SysUtils, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, StrUtils, ExtCtrls, Buttons, Math, YMCTask, YMCPlugin, YMCInternalPlugins, asif, frameget, inifiles,
-  filectrl, CheckLst, shellapi, AsifAdditions, ActnList, AppEvnts, Menus, YShared;
+  filectrl, CheckLst, shellapi, AsifAdditions, ActnList, AppEvnts, Menus, YShared, IndexAdditions;
 
 const
   INIVersion = 21;
@@ -25,7 +25,6 @@ type
     Settings: TGroupBox;
     CloseWhenDone: TCheckBox;
     LaunchWhenDone: TCheckBox;
-    Mpeg2DecRadioGroup: TRadioGroup;
     Metrics: TGroupBox;
     MetricFilterList: TCheckListBox;
     MoveFilterUpButton: TSpeedButton;
@@ -73,7 +72,6 @@ type
     procedure JobListDataObject(Control: TWinControl; Index: Integer;
       var DataObject: TObject);
     procedure SetAvisynthPluginDirectory1Click(Sender: TObject);
-    procedure Mpeg2DecRadioGroupClick(Sender: TObject);
     procedure SetDefaultPriorityClick(Sender: TObject);
     procedure MoveFilterUpActionExecute(Sender: TObject);
     procedure MoveFilterUpActionUpdate(Sender: TObject);
@@ -156,7 +154,7 @@ begin
 
   YMCPluginInit(@AddPlugin);
 
-  FTaskList := TYMCTaskList.Create(PluginPath, TDecoder(INI.ReadInteger(MainIniKey, 'DECODER', Integer(mdMpeg2Dec3))), INI);
+  FTaskList := TYMCTaskList.Create(PluginPath, INI.ReadString(MainIniKey, 'DECODER', ''), INI);
   FTaskList.SavedBy := Caption;
   FTaskList.DefaultPriority := TThreadPriority(INI.ReadInteger(MainIniKey, 'DefaultPriority', Integer(tpLowest)));
 
@@ -165,8 +163,6 @@ begin
   if PluginPath = '' then
     if MessageDlg('Avisynth plugin path has to be set. If you want to change it later delete or edit the ini file.', mtWarning, [mbok, mbcancel], 0) = mrok then
       SetAvisynthPluginDirectory;
-
-  Mpeg2DecRadioGroup.ItemIndex := Integer(FTaskList.Decoder);
 
   case FTaskList.DefaultPriority of
     tpIdle: Idle1.Checked := True;
@@ -202,7 +198,7 @@ begin
     WriteInteger(MainIniKey, 'Version', INIVersion);
     WriteBool(MainIniKey, 'CloseWhenDone', CloseWhenDone.Checked);
     WriteBool(MainIniKey, 'LaunchYatta', LaunchWhenDone.Checked);
-    WriteInteger(MainIniKey, 'Decoder', Mpeg2DecRadioGroup.ItemIndex);
+    WriteInteger(MainIniKey, 'Decoder', FTaskList.Decoder);
     WriteString(MainIniKey, 'PluginDir', FTaskList.PluginPath);
     WriteInteger(MainIniKey, 'MaxJobs', FTaskList.MaxThreads);
 
@@ -227,6 +223,11 @@ begin
       Exit;
 
   FTaskList.AddTask(Filename, Filename + '.yap');
+  if (FileExt = '.d2v') or (FileExt = '.dga') or (FileExt = '.dgi') then
+    FTaskList.Decoder = GetIndexDecoder(Filename);
+  else
+    FTaskList.Decoder := '';
+
   JobList.Count := JobList.Count + 1;
   JobList.ItemIndex := JobList.Count - 1;
 
@@ -410,11 +411,6 @@ end;
 procedure TMainForm.SetAvisynthPluginDirectory1Click(Sender: TObject);
 begin
   SetAvisynthPluginDirectory;
-end;
-
-procedure TMainForm.Mpeg2DecRadioGroupClick(Sender: TObject);
-begin
-  FTaskList.Decoder := TDecoder(Mpeg2DecRadioGroup.ItemIndex);
 end;
 
 procedure TMainForm.SetAvisynthPluginDirectory;
