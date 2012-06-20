@@ -12,6 +12,7 @@ uses
   crop in 'crop.pas' {CropForm},
   Asif in '..\Asif.pas',
   AsifAdditions in '..\AsifAdditions.pas',
+  IndexAdditions in '..\IndexAdditions.pas',
   tfm in 'tfm.pas' {TFMForm},
   YMCTask in 'YMCTask.pas',
   FunctionHooking in 'FunctionHooking.pas',

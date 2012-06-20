@@ -21,6 +21,7 @@ uses
   yshared in '..\yshared.pas',
   Asif in '..\Asif.pas',
   AsifAdditions in '..\AsifAdditions.pas',
+  IndexAdditions in '..\IndexAdditions.pas',
   keydefaults in 'keydefaults.pas',
   keymap in 'KeyMap.pas';
 
