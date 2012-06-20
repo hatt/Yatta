@@ -151,26 +151,11 @@ object MainForm: TMainForm
       TabOrder = 1
     end
   end
-  object Mpeg2DecRadioGroup: TRadioGroup
+  object Metrics: TGroupBox
     Left = 429
     Top = 68
     Width = 191
-    Height = 69
-    Anchors = [akTop, akRight]
-    Caption = 'Mpeg2Dec'
-    ItemIndex = 0
-    Items.Strings = (
-      'Mpeg2Dec3'
-      'DGDecode')
-    ParentBackground = False
-    TabOrder = 2
-    OnClick = Mpeg2DecRadioGroupClick
-  end
-  object Metrics: TGroupBox
-    Left = 429
-    Top = 144
-    Width = 191
-    Height = 306
+    Height = 382
     Anchors = [akTop, akRight, akBottom]
     Caption = 'Metric Collection'
     ParentBackground = False
