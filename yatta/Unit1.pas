@@ -988,6 +988,7 @@ begin
 
   for Counter := IfThen(TrackBar1.Position - 10 >= 0, TrackBar1.Position - 10, 0) to IfThen(TrackBar1.Position + 10 < TrackBar1.Max, TrackBar1.Position + 10, TrackBar1.Max) do
   begin
+    FTextLayer.Bitmap.Canvas.Font.Name := 'MS Sans Serif';
     if Counter mod Distance = 0 then
       FTextLayer.Bitmap.Canvas.Font.Style := [fsUnderline]
     else
@@ -1029,7 +1030,7 @@ procedure TForm1.DrawFrame();
 var
   AFN: Integer;
   Rind: TDecimateInfo;
-  Counter, C2: Integer;
+  Counter, C2, C3: Integer;
   FromFrame: Integer;
   Sif: TSectionInfo;
   DecimateCurrent, PostCurrent: Boolean;
@@ -1144,8 +1145,14 @@ begin
         with Form2.CustomRangeLists.Items.Objects[counter] as TCustomList do
           for c2 := 0 to Count - 1 do
             with Items[c2] as TCustomRange do
-              if (startframe <= TrackBar1.Position) and (endframe >= TrackBar1.Position) then
-                FInfoText.Append('CL: ' + name);
+              begin
+                if endframe < 0 then
+                  for c3 := 0 downto endframe + 1 do
+                    if (startframe - c3) = TrackBar1.Position then
+                      FInfoText.Append('CL: ' + name);
+                if (startframe <= TrackBar1.Position) and (endframe >= TrackBar1.Position) then
+                  FInfoText.Append('CL: ' + name);
+              end;
 
     for Counter := 0 to FInfoText.Count - 1 do
       FTextLayer.Bitmap.Canvas.TextOut(15, 40 + counter * 15, FInfoText[counter]);
@@ -2600,7 +2607,10 @@ begin
         Form2.CustomRanges.Count := Form2.SelectedCustomList.Count;
         Form2.SelectedCustomList.Sort(CustomListSort);
         FRangeOn := False;
-        FInfoText.Append('Added range; Start: ' + IntToStr(FRange) + '; End: ' + inttostr(TrackBar1.Position));
+        if Form11.SwapCustomList.Checked and (FRange > TrackBar1.Position) then
+          FInfoText.Append('Added range; Start: ' + IntToStr(TrackBar1.Position) + '; End: ' + inttostr(FRange))
+        else
+          FInfoText.Append('Added range; Start: ' + IntToStr(FRange) + '; End: ' + inttostr(TrackBar1.Position));
       end
       else if (Form2.SelectedCustomList <> nil) then
         Button8Click(nil)
@@ -2613,7 +2623,7 @@ begin
     begin
       if (Form2.SelectedCustomList <> nil) and FRangeOn then
       begin
-        if Form11.SwapCustomList.Checked and (FRange > TrackBar1.Position) then
+        if (FRange > TrackBar1.Position) then
           Form2.SelectedCustomList.Add(TCustomRange.Create(TrackBar1.Position, TrackBar1.Position - Frange - 1))
         else
           Form2.SelectedCustomList.Add(TCustomRange.Create(FRange, FRange - TrackBar1.Position - 1));
@@ -2621,10 +2631,11 @@ begin
         Form2.CustomRanges.Count := Form2.SelectedCustomList.Count;
         Form2.SelectedCustomList.Sort(CustomListSort);
         FRangeOn := False;
-        if FRange > TrackBar1.Position then
-          FInfoText.Append('Added range; Start: ' + IntToStr(FRange) + '; End: ' + IntToStr(FRange - TrackBar1.Position - 1));
+        if TrackBar1.Position < FRange then
+          FInfoText.Append('Added range; Start: ' + IntToStr(TrackBar1.Position) + '; Frame Number: ' + IntToStr(-(TrackBar1.Position - FRange - 1)))
         else
-          FInfoText.Append('Added range; Start: ' + IntToStr(TrackBar1.Position) + '; End: ' + IntToStr(TrackBar1.Position - FRange - 1));
+          FInfoText.Append('Added range; Start: ' + IntToStr(FRange) + '; Frame Number: ' + IntToStr(-(FRange - TrackBar1.Position - 1)));
+          
       end
       else if (Form2.SelectedCustomList <> nil) then
         Button8Click(nil)
