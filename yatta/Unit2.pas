@@ -1654,7 +1654,6 @@ begin
 
       for counter := 0 to sl.Count - 1 do
       begin
-        StarCount := 0;
         CurrentLine := sl[counter];
 
         subdiv.DelimitedText := CurrentLine;
