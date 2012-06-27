@@ -415,7 +415,7 @@ begin
       MetricsFile.Insert(0, 'CUTLIST=' + Header.CutList);
     if Header.Framecount > 0 then
       MetricsFile.Insert(0, 'FRAMECOUNT=' + IntToStr(Header.Framecount));
-    MetricsFile.Insert(0, 'DECODER=' + Decoder);
+    MetricsFile.Insert(0, 'DECODER=' + Header.Decoder);
     MetricsFile.Insert(0, 'ORDER=' + IntToStr(Header.Order));
     MetricsFile.Insert(0, 'TYPE=' + IntToStr(Header.ProjectType));
     MetricsFile.Insert(0, 'LASTVIDEOPATH=' + FInputFile);

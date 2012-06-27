@@ -198,7 +198,7 @@ begin
     WriteInteger(MainIniKey, 'Version', INIVersion);
     WriteBool(MainIniKey, 'CloseWhenDone', CloseWhenDone.Checked);
     WriteBool(MainIniKey, 'LaunchYatta', LaunchWhenDone.Checked);
-    WriteInteger(MainIniKey, 'Decoder', FTaskList.Decoder);
+    WriteString(MainIniKey, 'Decoder', FTaskList.Decoder);
     WriteString(MainIniKey, 'PluginDir', FTaskList.PluginPath);
     WriteInteger(MainIniKey, 'MaxJobs', FTaskList.MaxThreads);
 
@@ -224,7 +224,7 @@ begin
 
   FTaskList.AddTask(Filename, Filename + '.yap');
   if (FileExt = '.d2v') or (FileExt = '.dga') or (FileExt = '.dgi') then
-    FTaskList.Decoder = GetIndexDecoder(Filename);
+    FTaskList.Decoder := GetIndexDecoder(Filename)
   else
     FTaskList.Decoder := '';
 
