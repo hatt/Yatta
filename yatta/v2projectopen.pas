@@ -140,13 +140,14 @@ begin
   else if (FileExt = '.dgi') then
   begin
     DecName := GetIndexDecoder(Filename);
-    Form1..OriginalVideo := OpenVideo(Filename, DecName);
+    Form1.OriginalVideo := OpenVideo(Filename, DecName);
 
     Form1.SourceFile := Filename;
 
     NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex));
   end
   else
+  begin
     DecName := '';
     Form1.OriginalVideo := OpenVideo(Filename, DecName);
     
