@@ -350,7 +350,7 @@ begin
     FScriptEnvironment.CharArg(PChar(Filename));
     Result := FScriptEnvironment.InvokeWithClipResult(PChar(FOwner.Decoder + '_Mpeg2Source'));
 
-    if AnsiSameText(FOwner.Decoder, 'Mpeg2Dec3') and FScriptEnvironment.FunctionExists('SetPlanarLegacyAlignment') then
+    if not AnsiSameText(FOwner.Decoder, 'DGDecode') and FScriptEnvironment.FunctionExists('SetPlanarLegacyAlignment') then
     begin
       FScriptEnvironment.ClipArg(Result);
       FScriptEnvironment.BoolArg(True);
