@@ -1632,8 +1632,6 @@ var
   Counter: integer;
   hh: string;
   mr: TModalResult;
-  I: Integer;
-  StarCount: Integer;
   CurrentLine: string;
 begin
     pf := nil;
@@ -1658,11 +1656,6 @@ begin
       begin
         StarCount := 0;
         CurrentLine := sl[counter];
-        for I := 1 to Length(CurrentLine) do
-          if CurrentLine[I] = '¤' then
-            Inc(StarCount);
-        if StarCount >= 3 then
-          subdiv.Delimiter := '¤';
 
         subdiv.DelimitedText := CurrentLine;
 
