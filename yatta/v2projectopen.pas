@@ -70,7 +70,7 @@ begin
       IniFile := TMemIniFile.Create(Form1.SaveDialog5.FileName);
 
       DecName := IniFile.ReadString('YATTA V2', 'DECODER', '');
-      if (DecName = '')
+      if (DecName = '') then
         DecName := IniFile.ReadString('YATTA V2', 'MPEG2DECODER', 'mpeg2dec3');
       VideoSource := LeftStr(Filename, Length(Filename) - 4);
       Line := IniFile.ReadString('YATTA V2', 'CUTLIST', '');
@@ -119,32 +119,32 @@ begin
       IniFile.Free;
     end;
   end
-  else if (FileExt = '.d2v')
+  else if (FileExt = '.d2v') then
   begin
     DecName := GetIndexDecoder(Filename);
     Form1.OriginalVideo := OpenVideo(Filename, DecName);
 
     Form1.SourceFile := Filename;
 
-    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex))
+    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex));
   end
-  else if (FileExt = '.dga')
+  else if (FileExt = '.dga') then
   begin
     DecName := 'DGAVCDecode';
     Form1.OriginalVideo := OpenVideo(Filename, DecName);
     
     Form1.SourceFile := Filename;
     
-    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex))
+    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex));
   end
-  else if (FileExt = '.dgi')
+  else if (FileExt = '.dgi') then
   begin
     DecName := GetIndexDecoder(Filename);
     Form1..OriginalVideo := OpenVideo(Filename, DecName);
 
     Form1.SourceFile := Filename;
 
-    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex))
+    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex));
   end
   else
     DecName := '';
@@ -152,7 +152,7 @@ begin
     
     Form1.SourceFile := Filename;
     
-    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex))
+    NewProject(IfThen(Form11.RadioGroup3.ItemIndex >= 2, Form11.RadioGroup3.ItemIndex + 1, Form11.RadioGroup3.ItemIndex));
   end;
 end;
 

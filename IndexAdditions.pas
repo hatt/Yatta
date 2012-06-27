@@ -21,21 +21,21 @@ begin
 
 	ReadLn(IndexFile, DecoderLine);
 
-	if FileExt  = '.d2v' then
+	if (FileExt  = '.d2v') then
 		begin
 			if AnsiContainsStr(DecoderLine, 'DVD2AVIProject') then
 				Result := 'Mpeg2Dec3'
 			else if AnsiContainsStr(DecoderLine, 'DGIndexProjectFile') then
 				Result := 'DGDecode'
 		end
-	else if FileExt =  '.dgi' then
+	else if (FileExt = '.dgi') then
 		begin
 			if AnsiContainsStr(DecoderLine, 'DGAVCIndexFileDI') then
 				Result := 'DGAVCDecodeDi'
 			else if AnsiContainsStr(DecoderLine, 'DGIndexFileNV') then
 				Result := 'DGDecNV'
 		end
-	else if FileExt = '.dga' then
+	else if (FileExt = '.dga') then
 		Result := 'DGAVCDecode';
 
 	CloseFile(IndexFile);
