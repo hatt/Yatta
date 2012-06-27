@@ -350,7 +350,7 @@ begin
     FScriptEnvironment.CharArg(PChar(Filename));
     Result := FScriptEnvironment.InvokeWithClipResult(PChar(FOwner.Decoder + '_Mpeg2Source'));
 
-    if (FOwner.Decoder <> mdDGDecode) and FScriptEnvironment.FunctionExists('SetPlanarLegacyAlignment') then
+    if AnsiSameText(FOwner.Decoder, 'Mpeg2Dec3') and FScriptEnvironment.FunctionExists('SetPlanarLegacyAlignment') then
     begin
       FScriptEnvironment.ClipArg(Result);
       FScriptEnvironment.BoolArg(True);
@@ -359,15 +359,16 @@ begin
   end
   else if FileExt = '.dga' then
   begin
-    LoadPlugins('AVCSource', FOwner.PluginPath, FScriptEnvironment);
+    LoadPlugins(FOwner.Decoder + '_AVCSource', FOwner.PluginPath, FScriptEnvironment);
     FScriptEnvironment.CharArg(PChar(Filename));
     Result := FScriptEnvironment.InvokeWithClipResult('AVCSource');
   end
   else if FileExt = '.dgi' then
   begin
-    LoadPlugins('' + '_DGSource', FOwner.PluginPath, FScriptEnvironment);
+    LoadPlugins(FOwner.Decoder + '_DGSource', FOwner.PluginPath, FScriptEnvironment);
     FScriptEnvironment.CharArg(PChar(Filename));
     Result := FScriptEnvironment.InvokeWithClipResult(PChar('' + '_DGSource'));
+  end
   else if FileExt = '.avs' then
   begin
     FScriptEnvironment.CharArg(PChar(Filename));
