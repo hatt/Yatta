@@ -615,10 +615,10 @@ begin
         Line := SL[Counter];
         StarCount := 0;
         for I := 1 to Length(Line) do
-          if Line[I] = string('§') then
+          if Line[I] = '§' then
             Inc(StarCount);
         if StarCount >= 3 then
-          SubDiv.Delimiter := string('§');
+          SubDiv.Delimiter := '§';
 
         if Line <> '' then
         begin

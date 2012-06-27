@@ -797,14 +797,14 @@ begin
     TempExt := AnsiLowerCase(ExtractFileExt(Form1.SourceFile));
     if (TempExt = '.d2v') then
     begin
-      SL.Append(Decoder + '_Mpeg2Source("' + Form1.SourceFile + '")');
-      if not AnsiSameText(Decoder, 'DGDecode') and se.FunctionExists('SetPlanarLegacyAlignment') then
+      SL.Append(DecName + '_Mpeg2Source("' + Form1.SourceFile + '")');
+      if not AnsiSameText(DecName, 'DGDecode') and se.FunctionExists('SetPlanarLegacyAlignment') then
         SL.Append('SetPlanarLegacyAlignment(true)');
     end
     else if TempExt = '.dga' then
-      SL.Append('AVCSource("' + Form1.SourceFile + '")')
+      SL.Append(DecName + '_AVCSource("' + Form1.SourceFile + '")')
     else if TempExt = '.dgi' then
-      SL.Append(Decoder + '_DGSource("' + Form1.SourceFile + '")')
+      SL.Append(DecName + '_DGSource("' + Form1.SourceFile + '")')
     else if TempExt = '.avs' then
       SL.Append('Import("' + Form1.SourceFile + '")')
     else if TempExt = '.avi' then
@@ -1529,14 +1529,14 @@ begin
     try
       if TempExt = '.d2v' then
       begin
-        SL.Append(Decoder + '_Mpeg2Source("' + Form1.SourceFile + '")');
-        if not AnsiSameText(Decoder, 'DGDecode') and SE.FunctionExists('SetPlanarLegacyAlignment') then
+        SL.Append(DecName + '_Mpeg2Source("' + Form1.SourceFile + '")');
+        if not AnsiSameText(DecName, 'DGDecode') and SE.FunctionExists('SetPlanarLegacyAlignment') then
           SL.Append('SetPlanarLegacyAlignment(true)');
       end
       else if TempExt = '.dga' then
-        SL.Append('AVCSource("' + Form1.SourceFile + '")')
+        SL.Append(DecName + '_AVCSource("' + Form1.SourceFile + '")')
       else if TempExt = '.dgi' then
-        SL.Append(Decoder + '_DGSource("' + Form1.SourceFile + '")')
+        SL.Append(DecName + '_DGSource("' + Form1.SourceFile + '")')
       else if TempExt = '.avs' then
         SL.Append('Import("' + Form1.SourceFile + '")')
       else if TempExt = '.avi' then
