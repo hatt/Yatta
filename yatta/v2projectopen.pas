@@ -569,8 +569,6 @@ var
   HH: string;
   Counter: Integer;
   Line: string;
-  StarCount: Integer;
-  I: Integer;
 begin
   GetType0SharedValues(IniFile);
 
@@ -613,12 +611,6 @@ begin
       for Counter := 0 to SL.Count - 1 do
       begin
         Line := SL[Counter];
-        StarCount := 0;
-        for I := 1 to Length(Line) do
-          if Line[I] = '§' then
-            Inc(StarCount);
-        if StarCount >= 3 then
-          SubDiv.Delimiter := '§';
 
         if Line <> '' then
         begin
