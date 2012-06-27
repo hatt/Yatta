@@ -4,10 +4,19 @@ interface
 
 uses SysUtils, StrUtils, Controls, IniFiles, Classes;
 
-type
-	function GetIndexDecoder(Filename: string): string;
+function GetIndexDecoder(Filename: string): string;
+function CaseOfString(s: string; a: array of string): Integer;
 
 implementation
+
+function CaseOfString(s: string; a: array of string): Integer;
+begin
+  Result := 0;
+  while (Result < Length(a)) and (a[Result] <> s) do
+    Inc(Result);
+  if a[Result] <> s then
+    Result := -1;
+end;
 
 function GetIndexDecoder(Filename: string): string;
 var
@@ -22,9 +31,9 @@ begin
 	
 	ReadLn(IndexFile, DecoderLine);
 
-  case FileExt of
+  case CaseOfString(FileExt, ['.d2v', '.dgi', '.dga']) of
     '.d2v' : begin
-      if AnsiContainsStr(FDecoder, 'DVD2AVIProject') then
+      if AnsiContainsStr(DecoderLine, 'DVD2AVIProject') then
         Result := 'Mpeg2Dec3'
       else if AnsiContainsStr(DecoderLine, 'DGIndexProjectFile') then
         Result := 'DGDecode'
