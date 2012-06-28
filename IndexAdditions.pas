@@ -23,16 +23,16 @@ begin
 
 	if (FileExt  = '.d2v') then
 		begin
-			if AnsiContainsStr(DecoderLine, 'DVD2AVIProject') then
+			if AnsiContainsText(DecoderLine, 'DVD2AVIProject') then
 				Result := 'Mpeg2Dec3'
-			else if AnsiContainsStr(DecoderLine, 'DGIndexProjectFile') then
+			else if AnsiContainsText(DecoderLine, 'DGIndexProjectFile') then
 				Result := 'DGDecode'
 		end
 	else if (FileExt = '.dgi') then
 		begin
-			if AnsiContainsStr(DecoderLine, 'DGAVCIndexFileDI') then
+			if AnsiContainsText(DecoderLine, 'DGAVCIndexFileDI') then
 				Result := 'DGAVCDecodeDi'
-			else if AnsiContainsStr(DecoderLine, 'DGIndexFileNV') then
+			else if AnsiContainsText(DecoderLine, 'DGIndexFileNV') then
 				Result := 'DGDecNV'
 		end
 	else if (FileExt = '.dga') then
